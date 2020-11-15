@@ -1,0 +1,2 @@
+{:deps {com.datomic/dev-local {:mvn/version "0.9.195"}
+        datascript {:mvn/version "1.0.1"}}}
