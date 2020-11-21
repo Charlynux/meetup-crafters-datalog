@@ -13,7 +13,6 @@
 
 ;; Datoms partial definition
 ;; [entity attribute value]
-
 (def sort-of-db [[1 :name "Louis"]
                  [1 :age 12]
                  [2 :name "Charles"]
@@ -24,6 +23,12 @@
        [_ :name ?name]]
      sort-of-db)
 
+;; Dans un Datom, TOUT peut-être requêté !!!
+(d/q '[:find ?attr
+       :where
+       [_ ?attr _]]
+     (d/db conn-schemaless))
+
 (assert (= @conn-schemaless
            (d/db conn-schemaless)))
 
@@ -33,31 +38,52 @@
        [?e :age ?age]]
      @conn-schemaless)
 
-;; TOUT peut-être requêté !!!
-(d/q '[:find ?attr
-       :where
-       [_ ?attr _]]
-     @conn-schemaless)
-
+;; Identifiant de l'entité "Louis"
 (def id-louis (first (first (d/q '[:find ?id
                                    :where
                                    [?id :name "Louis"]]
                                  @conn-schemaless))))
 
+(def db-before-update @conn-schemaless)
+
+;; Mise à jour de l'âge de "Louis"
 (d/transact! conn-schemaless
              [{:db/id id-louis :name "Louis" :age 26}])
 
-#_(d/transact! conn-schemaless
-             [{:db/id id-louis :role "Middle Dev"}]
-             {:iteracode/imported-file "20201111-employees-export.csv"})
+;; Mise à jour effectuée ?
+(d/q '[:find ?name ?age
+       :where
+       [?e :name ?name]
+       [?e :age ?age]]
+     @conn-schemaless)
 
-#_(d/q '[:find ?attr ?tx ?txInstant
+;; Database is immutable
+(d/q '[:find ?name ?age
+       :where
+       [?e :name ?name]
+       [?e :age ?age]]
+     db-before-update)
+
+;; "Quand" chaque attribut de Louis a été mis à jour ?
+(d/q '[:find ?attr ?value ?tx
        :where
        [?e :name "Louis"]
-       [?e ?attr ?value ?tx]
-       #_[?tx :iteracode/imported-file ?source]
-       [?tx :db/txInstant ?txInstant]]
+       [?e ?attr ?value ?tx]]
      @conn-schemaless)
+
+;; TODO
+;; Schema with sub-entities
+;; Queries
+;;  Params ($)
+;;  Param "Collections"
+;;  Param "Relations"
+;;  Multiple DBs
+;;  Rules
+;;  Pull + (d/q (pull))
+;;  Aggregates
+;;  Predicates + Your own
+;; Filtered DB
+;; db/with
 
 (d/q '[:find ?name
        :in $ %
