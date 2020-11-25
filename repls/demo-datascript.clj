@@ -221,25 +221,24 @@
      @conn
      (fn [skill] (.endsWith skill "PHP")))
 
+;; Requêter plusieurs bases de données
+(d/q '[:find ?name
+       :in $skills $ages
+       :where
+       [$skills ?e :employee/name ?name]
+       [$skills ?e :employee/skills "PHP"]
+
+       [$ages ?e :name ?name]
+       [$ages ?e :age ?age]
+       [(< ?age 35)]]
+     @conn
+     @conn-schemaless)
+
 ;; TODO
 ;; Queries
-;;  Multiple DBs
 ;;  Pull + (d/q (pull))
 ;; Filtered DB
 ;; db/with
-
-
-(d/q '[:find ?name
-       :in $ %
-       :where
-       [?e :name ?name]
-       [?e :age ?age]
-       (old? ?age)]
-     @conn-schemaless
-     '[[(old? ?age)
-        [(> ?age 30)]]])
-
-
 
 ;; Database filter
 (d/filter

@@ -26,6 +26,10 @@ Comment obtenir le jar Datomic utilisé dans ce repository.
 
 Un rapide tutoriel pour apprendre Datalog.
 
+[Querying accross Datomic databases](https://cjohansen.no/querying-across-datomic-databases/)
+
+Un exemple élégant de requête multi-database s'appuyant sur `d/since`.
+
 ### Vidéos
 
 Vous ne trouverez pas ici de talks de Rich Hickey au sujet de Datomic. J'ai préféré me concentrer sur des vidéos tournées autour de l'utilisation de Datomic plutôt que sur sa conception.
