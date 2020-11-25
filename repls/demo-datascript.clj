@@ -253,12 +253,33 @@
        [?e :employee/skills "PHP"]]
      @conn)
 
-;; TODO
 ;; Filtered DB
-;; db/with
+(def anonymized-db
+  (d/filter
+   @conn
+   (fn [_ [?e ?a ?v ?tx]]
+     (not
+      (or (= ?a :employee/company)
+          (= ?a :employee/name))))))
 
-;; Database filter
-(d/filter
- @conn-schemaless
- (fn [_ [?e ?a ?v ?tx]]
-   (not= ?a :age)))
+(d/q '[:find ?id
+       :where
+       [?e :employee/id ?id]
+       [?e :employee/skills "Talend"]]
+     anonymized-db)
+
+;; Autres usages
+;; - Sécurité : filter "owns to user"
+;; - Exclusion de données erronées (cf. 'reified transactions' dans Datomic)
+
+;; Visitons le futur
+(def whatif-db
+  (d/db-with
+   @conn
+   [{:employee/id "4c9a6eb4-7782-4361-a9a7-479ad26b7f1d" :employee/skills #{"React"}}]))
+
+(d/q '[:find ?name (count ?skill)
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/skills ?skill]]
+     whatif-db)
