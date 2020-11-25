@@ -234,9 +234,26 @@
      @conn
      @conn-schemaless)
 
+;; 'Pull' Queries
+
+(d/pull
+ @conn
+ '[:employee/name
+   {:employee/company [:company/name]}
+   :employee/skills]
+ [:employee/id "c58cfe40-73cd-4b9a-9c55-2e3587cc87cb"])
+
+(d/q '[:find [(pull ?e
+                    [:employee/name
+                      {:employee/company [:company/name]}
+                     :employee/skills])
+              ...] ;; Pull all values
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/skills "PHP"]]
+     @conn)
+
 ;; TODO
-;; Queries
-;;  Pull + (d/q (pull))
 ;; Filtered DB
 ;; db/with
 
