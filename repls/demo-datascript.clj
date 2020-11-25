@@ -199,12 +199,32 @@
         [?e1 :parent ?e3]
         (ascendant? ?e3 ?e2)]])
 
+;; Aggregates
+(d/q '[:find (count ?name)
+       :where
+       [_ :employee/name ?name]]
+     @conn)
+
+(d/q '[:find ?name (count ?skill)
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/skills ?skill]]
+     @conn)
+
+;; Use your own predicates
+(d/q '[:find ?name
+       :in $ predicate
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/skills ?skill]
+       [(predicate ?skill)]]
+     @conn
+     (fn [skill] (.endsWith skill "PHP")))
+
 ;; TODO
 ;; Queries
 ;;  Multiple DBs
 ;;  Pull + (d/q (pull))
-;;  Aggregates
-;;  Predicates + Your own
 ;; Filtered DB
 ;; db/with
 
