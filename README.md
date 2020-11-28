@@ -58,3 +58,13 @@ Des réflexions et quelques cas d'usage de Datomic/Datascript et comment ces tec
 [Simplifying ETL with Clojure and Datomic - Stuart Halloway](https://youtu.be/oOON--g1PyU)
 
 La présentation la moins "Datomic" de la série. Elle est plutôt orientée Clojure.
+
+## Alternatives
+
+[Crux](https://github.com/juxt/crux)
+
+Souvent citée comme alternative Open Source à Datomic, lorsque le côté propriétaire (ou payant) de ce dernier pose problème.
+
+[Datahike](https://github.com/replikativ/datahike)
+
+"Port" de Datascript utilisant une autre structure de données en interne.
