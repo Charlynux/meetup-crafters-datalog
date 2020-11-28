@@ -74,3 +74,40 @@
        [?e ?a _]
        [?a :db/ident ?attr]]
      (d/db conn))
+
+(d/transact conn {:tx-data [{:db/ident :employee/role
+                             :db/valueType :db.type/string
+                             :db/cardinality :db.cardinality/one}
+                            {:db/ident :import/file-name
+                             :db/valueType :db.type/string
+                             :db/cardinality :db.cardinality/one}]})
+
+(d/transact conn {:tx-data
+                  [{:db/id "datomic.tx" :import/file-name "20181122-iteracode-roles.csv"}
+                   {:employee/id "c58cfe40-73cd-4b9a-9c55-2e3587cc87cb"
+                    :employee/role "Bottom Dev"}
+                   {:employee/id "4c9a6eb4-7782-4361-a9a7-479ad26b7f1d"
+                    :employee/role "Bottom Dev"}
+                   {:employee/id "c7ac8fc2-2fe5-4dab-acc2-382102ed0ef6"
+                    :employee/role "Middle Dev"}]})
+
+(d/transact conn {:tx-data
+                  [{:db/id "datomic.tx" :import/file-name "20201122-iteracode-roles.csv"}
+                   {:employee/id "c58cfe40-73cd-4b9a-9c55-2e3587cc87cb"
+                    :employee/role "Middle Dev"}
+                   {:employee/id "4c9a6eb4-7782-4361-a9a7-479ad26b7f1d"
+                    :employee/role "Middle Dev"}
+                   {:employee/id "c7ac8fc2-2fe5-4dab-acc2-382102ed0ef6"
+                    :employee/role "Middle Dev"}]})
+
+(d/q '[:find ?name ?role ?source
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/role ?role ?tx]
+       [?tx :import/file-name ?source]]
+     (d/db conn))
+
+;; TODO
+;; d/since
+;; d/as-of
+;; d/history eavt op?
