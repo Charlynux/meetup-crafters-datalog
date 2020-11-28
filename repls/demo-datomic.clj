@@ -4,60 +4,73 @@
 (def client (d/client {:server-type :dev-local
                        :system "dev"}))
 
-(def db-config {:db-name "movies"})
+(def db-config {:db-name "meetup-crafters-demo"})
 
+(comment
+  (d/delete-database client db-config))
 (d/create-database client db-config)
 
 (def conn (d/connect client db-config))
 
-(def movie-schema [{:db/ident :movie/title
-                    :db/valueType :db.type/string
-                    :db/cardinality :db.cardinality/one
-                    :db/doc "The title of the movie"
-                    :db/unique :db.unique/identity}
-
-                   {:db/ident :movie/genre
-                    :db/valueType :db.type/string
-                    :db/cardinality :db.cardinality/one
-                    :db/doc "The genre of the movie"}
-
-                   {:db/ident :movie/release-year
-                    :db/valueType :db.type/long
-                    :db/cardinality :db.cardinality/one
-                    :db/doc "The year the movie was released in theaters"}])
-
-(d/transact conn {:tx-data movie-schema})
-
-(def first-movies [{:movie/title "The Goonies"
-                    :movie/genre "action/adventure"
-                    :movie/release-year 1985}
-                   {:movie/title "Commando"
-                    :movie/genre "thriller/action"
-                    :movie/release-year 1985}
-                   {:movie/title "Repo Man"
-                    :movie/genre "punk dystopia"
-                    :movie/release-year 1984}])
-
-(d/transact conn {:tx-data first-movies})
-#_(d/transact conn first-movies)
+;; Fail ! "Insufficient bindings, will cause db scan"
+(d/q '[:find ?attr
+       :where
+       [_ ?attr _]]
+     (d/db conn))
 
 (d/q '[:find ?attr
        :where
-       ;[?e :movie/title _]
+       [_ :db/ident ?attr]]
+     (d/db conn))
+
+(def schema [;; Company
+             {:db/ident :company/name
+              :db/valueType :db.type/string
+              :db/unique :db.unique/identity
+              :db/cardinality :db.cardinality/one}
+             ;; Employee
+             {:db/ident :employee/id
+              :db/valueType :db.type/string ;; :db.type/uuid
+              :db/unique :db.unique/identity
+              :db/cardinality :db.cardinality/one}
+             {:db/ident :employee/name
+              :db/valueType :db.type/string
+              :db/cardinality :db.cardinality/one}
+             {:db/ident :employee/company
+              :db/valueType :db.type/ref
+              :db/cardinality :db.cardinality/one}
+             {:db/ident :employee/skills
+              :db/valueType :db.type/string
+              :db/cardinality :db.cardinality/many}])
+
+(d/transact conn {:tx-data schema})
+
+(def employees [{:employee/id "c58cfe40-73cd-4b9a-9c55-2e3587cc87cb"
+                 :employee/name "Louis"
+                 :employee/company {:company/name "Iteracode"}
+                 :employee/skills #{"PHP" "CakePHP" "Symfony" "Javascript" "Ansible"}}
+                {:employee/id "4c9a6eb4-7782-4361-a9a7-479ad26b7f1d"
+                 :employee/name "Florent"
+                 :employee/company {:company/name "Iteracode"}
+                 :employee/skills #{"PHP" "CakePHP" "Wordpress" "Javascript" "Design"}}
+                {:employee/id "c7ac8fc2-2fe5-4dab-acc2-382102ed0ef6"
+                 :employee/name "Maxime"
+                 :employee/company {:company/name "Iteracode"}
+                 :employee/skills #{"PHP" "CakePHP" "Prestashop" "Javascript" "Talend"}}])
+
+(d/transact conn {:tx-data employees})
+
+(d/transact conn {:tx-data [{:company/name "Iteracode" :company/website "https://iteracode.fr"}]})
+
+(d/transact conn {:tx-data [{:db/ident :company/website
+                             :db/valueType :db.type/string
+                             :db/cardinality :db.cardinality/one}]})
+
+(d/transact conn {:tx-data [{:company/name "Iteracode" :company/website "https://iteracode.fr"}]})
+
+(d/q '[:find ?attr
+       :where
+       [?e :employee/id _]
        [?e ?a _]
        [?a :db/ident ?attr]]
      (d/db conn))
-
-(d/q '[:find ?year ?tx ?op
-       :where [_ :movie/release-year ?year ?tx ?op]]
-     (d/history (d/db conn)))
-
-(d/transact conn {:tx-data [{:movie/title "The Goonies"
-                            :movie/genre "action/adventure"
-                            :movie/release-year 1986}
-                           {:movie/title "Commando"
-                            :movie/genre "thriller/action"
-                            :movie/release-year 1985}
-                           {:movie/title "Repo Man"
-                            :movie/genre "punk dystopia"
-                            :movie/release-year 1981}]})
