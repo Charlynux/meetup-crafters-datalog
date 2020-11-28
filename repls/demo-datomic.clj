@@ -107,7 +107,51 @@
        [?tx :import/file-name ?source]]
      (d/db conn))
 
-;; TODO
-;; d/since
+(d/q '[:find ?name ?role ?tx
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/role ?role ?tx]]
+     (d/history (d/db conn)))
+
+;; Définition d'un Datom
+;; [entity attribute value transaction op?]
+(d/q '[:find ?name ?role ?tx ?op
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/role ?role ?tx ?op]]
+     (d/history (d/db conn)))
+
+(def first-import-tx
+  (ffirst (d/q '[:find ?tx
+                 :where [?tx :import/file-name "20181122-iteracode-roles.csv"]]
+               (d/db conn))))
+
 ;; d/as-of
-;; d/history eavt op?
+
+(d/q '[:find ?name ?role
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/role ?role]]
+     (d/as-of (d/db conn) first-import-tx))
+
+;; d/since
+
+(d/q '[:find ?name ?role
+       :where
+       [?e :employee/name ?name]
+       [?e :employee/role ?role]]
+     (d/since (d/db conn) first-import-tx))
+;; Retourne [] puisque depuis le deuxième import, il n'y a pas eu d'ajout de noms d'employés
+
+(d/q '[:find ?role
+       :where
+       [_ :employee/role ?role]]
+     (d/since (d/db conn) first-import-tx))
+
+(d/q '[:find ?name ?role
+       :in $db $recent
+       :where
+       [$db ?e :employee/name ?name]
+       [$recent ?e :employee/role ?role]]
+     (d/db conn)
+     (d/since (d/db conn) first-import-tx))
