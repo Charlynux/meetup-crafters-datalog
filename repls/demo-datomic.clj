@@ -60,6 +60,22 @@
 
 (d/transact conn {:tx-data employees})
 
+;; Predicates
+(d/q '[:find ?name
+       :where
+       [_ :employee/name ?name]
+       [(.startsWith ?name "Flo")]]
+     (d/db conn))
+
+(defn useless-predicate [name]
+  (= "Florent" name))
+
+(d/q '[:find ?name
+       :where
+       [_ :employee/name ?name]
+       [(amiens-crafters.datomic/useless-predicate ?name)]]
+     (d/db conn))
+
 (d/transact conn {:tx-data [{:company/name "Iteracode" :company/website "https://iteracode.fr"}]})
 
 (d/transact conn {:tx-data [{:db/ident :company/website
