@@ -1,4 +1,5 @@
-(require '[datascript.core :as d])
+(ns amiens-crafters.datascript
+  (:require [datascript.core :as d]))
 
 (def conn-schemaless (d/create-conn))
 
