@@ -171,3 +171,23 @@
        [$recent ?e :employee/role ?role]]
      (d/db conn)
      (d/since (d/db conn) first-import-tx))
+
+;;;;;;
+;; Requêtes autour des transactions
+;;;;;
+
+;; Quand l'information "role" a-t-elle été ajoutée ?
+(d/q '[:find ?tx ?inst
+       :where
+       [_ :db/ident :employee/role ?tx]
+       [?tx :db/txInstant ?inst]] (d/db conn))
+;; => [[13194139533322 #inst "2020-12-04T18:12:33.732-00:00"]]
+
+;; Quand a-t-elle été ajoutée la première fois ?
+(d/q '[:find (min ?tx)
+       :where
+       [_ :employee/role _ ?tx]]
+     (d/db conn))
+;; => [[13194139533323]]
+
+(def interesting-tx (ffirst *1))
