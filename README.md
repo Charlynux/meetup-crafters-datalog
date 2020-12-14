@@ -14,6 +14,37 @@ Lors de ces dernières semaines, j'ai regardé quelques talks sur le sujet et j'
 
 Si vous voulez découvrir une façon différente de penser la base de données, cette soirée devrait combler vos attentes.
 
+## Local run
+
+### Datascript
+
+La base de données étant in-memory, il n'y a rien de spécial. Tout se fait directement dans le fichier `repls/demo-datascript.clj`.
+
+### Datomic dev-local
+
+Il faut un peu de configuration pour récupérer le JAR (cf premier lien des références).
+
+Ensuite, rendez vous dans le fichier `repls/demo-datomic.clj` et utilisez le client "dev-local".
+
+
+### Datomic Pro
+
+Pour tester l'intégralité des commandes, il va vous falloir récupérer une licence Datomic Starter (gratuite), télécharger Datomic, faire de la configuration en suivant la [documentation officielle](https://docs.datomic.com/on-prem/dev-setup.html).
+
+Puis lancer les commandes suivantes dans le dossier :
+
+``` cmd
+bin/transactor config/dev-transactor-template.properties
+```
+
+``` cmd
+bin/run -m datomic.peer-server -h localhost -p 8998 -a myaccesskey,mysecret -d meetup-crafters-demo,datomic:dev://localhost:4334/meetup-crafters-demo
+```
+
+Comme avec dev-local, rendez vous dans le fichier `repls/demo-datomic.clj` et utilisez le client "peer-server", ajoutez des données dans la base.
+
+Puis dans le fichier `repls/demo-datomic-pro.clj`, vous pourrez manipuler les requêtes autour de Log API.
+
 ## Références
 
 ### Tutos & co
