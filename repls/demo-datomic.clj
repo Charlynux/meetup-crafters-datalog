@@ -183,7 +183,7 @@
        [?tx :db/txInstant ?inst]] (d/db conn))
 ;; => [[13194139533322 #inst "2020-12-04T18:12:33.732-00:00"]]
 
-;; Quand a-t-elle été ajoutée la première fois ?
+;; Quand a-t-elle été utilisée la première fois ?
 (d/q '[:find (min ?tx)
        :where
        [_ :employee/role _ ?tx]]
@@ -191,3 +191,13 @@
 ;; => [[13194139533323]]
 
 (def interesting-tx (ffirst *1))
+
+;; Quelles sont toutes les valeurs modifiées par cette transaction ?
+(d/q '[:find ?attr ?value
+       :where
+       [_  ?a ?value ?tx]
+       [?a :db/ident ?attr]]
+     (d/db conn)
+     interesting-tx)
+;; Erreur : Insufficent bindings, will cause db scan
+;; Pas d'index sur la transaction
