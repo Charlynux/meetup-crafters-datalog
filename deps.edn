@@ -1,2 +1,9 @@
-{:deps {com.datomic/dev-local {:mvn/version "0.9.195"}
-        datascript {:mvn/version "1.0.1"}}}
+{:mvn/repos
+ {"my.datomic.com" {:url "https://my.datomic.com/repo"}}
+ :deps {datascript {:mvn/version "1.0.1"}
+
+        com.datomic/dev-local {:mvn/version "0.9.195"}
+
+        ;; Datomic Pro
+        com.datomic/client-pro {:mvn/version "0.9.63"}
+        com.datomic/datomic-pro {:mvn/version "0.9.6045"}}}

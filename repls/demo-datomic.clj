@@ -3,6 +3,12 @@
 
 (def client (d/client {:server-type :dev-local
                        :system "dev"}))
+;; or
+(def client (d/client {:server-type :peer-server
+                       :access-key "myaccesskey"
+                       :secret "mysecret"
+                       :endpoint "localhost:8998"
+                       :validate-hostnames false}))
 
 (def db-config {:db-name "meetup-crafters-demo"})
 
