@@ -1,6 +1,7 @@
 {:mvn/repos
  {"my.datomic.com" {:url "https://my.datomic.com/repo"}}
  :deps {datascript {:mvn/version "1.0.1"}
+        juxt/crux-core {:mvn/version "RELEASE"}
 
         com.datomic/dev-local {:mvn/version "0.9.195"}
 
