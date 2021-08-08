@@ -111,5 +111,42 @@
  skill-query
  "Talend")
 
+(crux/q
+ (crux/db crux)
+ '{:find [name]
+   :where [[e :employee/name name]
+           [e :employee/skills language]
+           [e :employee/skills tech]]
+   :in [[language tech]]}
+ ["PHP" "Ansible"])
+
+(crux/q
+ (crux/db crux)
+ '{:find [name]
+   :where [[e :employee/name name]
+           [e :employee/skills skill]]
+   :in [[skill ...]]}
+ ["Symfony" "Wordpress"])
+
+(crux/q
+ (crux/db crux)
+ '{:find [skill]
+   :where [(at-least-2 skill)]
+   :rules [[(at-least-2 ?skill)
+            [?e1 :employee/skills ?skill]
+            [?e2 :employee/skills ?skill]
+            [(not= ?e1 ?e2)]]]})
+
+(crux/q
+ (crux/db crux)
+ '{:find [(count name)]
+   :where [[_ :employee/name name]]})
+
+(crux/q
+ (crux/db crux)
+ '{:find [name (count skill)]
+   :where [[e :employee/name name]
+           [e :employee/skills skill]]})
+
 ;; Pour arrêter le noeud
 (.close crux)
