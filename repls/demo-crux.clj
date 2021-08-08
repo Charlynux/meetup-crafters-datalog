@@ -54,6 +54,62 @@
 ;; Dans la requête équivalente, Datomic retournait uniquement quand une valeur était apparue pour la première fois.
 ;; A noter que je n'ai pas creusé le sujet, il est peut-être possible d'avoir le même type de réponse avec Crux.
 
+;; Ici, nous devrions manipuler des données imbriquées. Mais mes premières lectures de documentation/tutoriels ne parlent que de
+;; données "plates".
+;; Je ne vais pas chercher plus avant pour l'instant et abandonner l'idée de "company" pour un employé.
+
+;; Je reprends exactement les données de `demo-datascript.clj` et `demo-datomic.clj`.
+(def employees [{:employee/id "c58cfe40-73cd-4b9a-9c55-2e3587cc87cb"
+                 :employee/name "Louis"
+                 :employee/company {:company/name "Iteracode"}
+                 :employee/skills #{"PHP" "CakePHP" "Symfony" "Javascript" "Ansible"}}
+                {:employee/id "4c9a6eb4-7782-4361-a9a7-479ad26b7f1d"
+                 :employee/name "Florent"
+                 :employee/company {:company/name "Iteracode"}
+                 :employee/skills #{"PHP" "CakePHP" "Wordpress" "Javascript" "Design"}}
+                {:employee/id "c7ac8fc2-2fe5-4dab-acc2-382102ed0ef6"
+                 :employee/name "Maxime"
+                 :employee/company {:company/name "Iteracode"}
+                 :employee/skills #{"PHP" "CakePHP" "Prestashop" "Javascript" "Talend"}}])
+
+(defn employee->document
+  "Cette fonction fait les adaptations nécessaires avant d'envoyer la donnée dans Crux."
+  [employee]
+  (-> employee
+      (dissoc :employee/company)
+      (assoc :crux.db/id (:employee/id employee))))
+
+(crux/submit-tx crux
+                (mapv
+                 (fn [employee] [:crux.tx/put (employee->document employee)])
+                 employees))
+
+(crux/q
+ (crux/db crux)
+ '{:find [name]
+   :where [[_ :employee/name name]]})
+
+(crux/q
+ (crux/db crux)
+ '{:find [name]
+   :where [[e :employee/name name]
+           [e :employee/skills "PHP"]]})
+
+(def skill-query
+  '{:find [name]
+    :where [[e :employee/name name]
+            [e :employee/skills skill]]
+    :in [skill]})
+
+(crux/q
+ (crux/db crux)
+ skill-query
+ "Symfony")
+
+(crux/q
+ (crux/db crux)
+ skill-query
+ "Talend")
 
 ;; Pour arrêter le noeud
 (.close crux)
