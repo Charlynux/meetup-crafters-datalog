@@ -81,7 +81,8 @@
 
 (crux/submit-tx crux
                 (mapv
-                 (fn [employee] [:crux.tx/put (employee->document employee)])
+                 (fn [employee] [:crux.tx/put (employee->document employee)
+                                 #inst "2020-02-11"])
                  employees))
 
 (crux/q
@@ -147,6 +148,31 @@
  '{:find [name (count skill)]
    :where [[e :employee/name name]
            [e :employee/skills skill]]})
+
+
+;; Equivalent pour `d/as-of`
+(def updated-maxime {:employee/id "c7ac8fc2-2fe5-4dab-acc2-382102ed0ef6"
+                     :employee/name "Maxime"
+                     :employee/company {:company/name "Iteracode"}
+                     :employee/skills #{"PHP" "CakePHP" "Prestashop" "Javascript" "Talend" "Accounting"}})
+(crux/submit-tx crux
+                [[:crux.tx/put
+                  (employee->document updated-maxime)
+                  #inst "2021-03-07"]])
+
+(defn find-accounters [db]
+  (crux/q
+   db
+   '{:find [name]
+     :where [[e :employee/name name]
+             [e :employee/skills skill]]
+     :in [[skill ...]]}
+   ["Accounting"]))
+
+(find-accounters (crux/db crux #inst "2020-02-19"))
+
+(find-accounters (crux/db crux))
+
 
 ;; Pour arrêter le noeud
 (.close crux)
