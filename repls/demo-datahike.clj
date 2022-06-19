@@ -1,4 +1,12 @@
 (ns amiens-crafters.datahike
+  "Datahike est un 'port' de Datascript, mais contrairement à ce dernier, Datahike propose un stockage durable.
+
+  On se retrouve ainsi avec un clone de Datomic. Toutes les propriétés temporelles(since, as-of, history) sont disponibles.
+  La configuration permet de switcher facilement le stockage. Ici, j'ai commencé l'expérience avec une base in-memory. Puis (en m'appuyant sur datahike-jdbc, https://github.com/replikativ/datahike-jdbc/), j'ai pu basculé sur un stockage dans PostgreSQL.
+
+  Je trouve assez amusant qu'une application qui côté OPS affiche JVM + Postgre, soit en réalité une application avec du Lisp + Datalog.
+  Toutefois, il apparaît que la base de donnée sert uniquement à stocker une seule ligne avec 3 colonnes. A ce niveau, il est donc probablement plus simple d'utiliser un stockage fichier.
+  Cela explique certainement les 12 étoiles sur le Github de datahike-jdbc, quand Datahike en affiche 1.4k."
   (:require [datahike.api :as d]))
 
 (def cfg {:store {:backend :mem}})
@@ -424,6 +432,11 @@
 (def interesting-tx (ffirst *1))
 
 ;; Quelles sont toutes les valeurs modifiées par cette transaction ?
+;; Note : Ici, contrairement à Datomic, on récupère directement le nom
+;; de l'attribut. Pour passer à une version compatible avec Datomic, il
+;; faut se référer à cette documentation.
+;;
+;; https://github.com/replikativ/datahike/blob/main/doc/config.md#attribute-references
 (d/q '[:find ?a ?value
        :in $ ?tx
        :where
