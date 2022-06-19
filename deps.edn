@@ -9,4 +9,5 @@
         com.datomic/client-pro {:mvn/version "0.9.63"}
         com.datomic/datomic-pro {:mvn/version "0.9.6045"}
 
-        io.replikativ/datahike {:mvn/version "0.5.1506"}}}
+        io.replikativ/datahike {:mvn/version "0.5.1506"}
+        io.replikativ/datahike-jdbc {:mvn/version "0.1.2-SNAPSHOT"}}}

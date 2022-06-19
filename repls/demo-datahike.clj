@@ -3,6 +3,21 @@
 
 (def cfg {:store {:backend :mem}})
 
+(comment
+  "docker run --detach --publish 5432:5432 --env POSTGRES_DB=config-test --env POSTGRES_USER=alice --env POSTGRES_PASSWORD=foo postgres:alpine"
+  (require '[datahike-jdbc.core])
+
+  (def cfg {:store {:backend :jdbc
+                    :dbtype "postgresql"
+                    :host "localhost"
+                    :port 5432
+                    :user "alice"
+                    :password "foo"
+                    :dbname "config-test"}})
+
+  (d/release conn)
+  )
+
 (d/create-database cfg)
 
 (def conn (d/connect cfg))
