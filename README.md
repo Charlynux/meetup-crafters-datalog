@@ -45,6 +45,13 @@ Comme avec dev-local, rendez vous dans le fichier `repls/demo-datomic.clj` et ut
 
 Puis dans le fichier `repls/demo-datomic-pro.clj`, vous pourrez manipuler les requêtes autour de Log API.
 
+### XTDB
+
+Une autre base de données souvent citée comme alternative Open Source à Datomic.
+
+Elle dispose d'un fonctionnement "in-memory", tout se fait donc dans le fichier
+ `repls/demo_xtdb`.
+
 ## Références
 
 ### Tutos & co
@@ -90,11 +97,7 @@ Des réflexions et quelques cas d'usage de Datomic/Datascript et comment ces tec
 
 La présentation la moins "Datomic" de la série. Elle est plutôt orientée Clojure.
 
-## Alternatives
-
-[Crux](https://github.com/juxt/crux)
-
-Souvent citée comme alternative Open Source à Datomic, lorsque le côté propriétaire (ou payant) de ce dernier pose problème.
+## Alternative
 
 [Datahike](https://github.com/replikativ/datahike)
 
