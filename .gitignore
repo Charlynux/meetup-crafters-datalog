@@ -1,3 +1,6 @@
 .cpcache/
 .nrepl-port
 /.calva/
+
+.tool-versions
+.install/
