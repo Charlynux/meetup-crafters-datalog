@@ -22,28 +22,37 @@ La base de données étant in-memory, il n'y a rien de spécial. Tout se fait di
 
 ### Datomic dev-local
 
-Il faut un peu de configuration pour récupérer le JAR (cf premier lien des références).
-
-Ensuite, rendez vous dans le fichier `repls/demo-datomic.clj` et utilisez le client "dev-local".
-
+[DE RETOUR PROCHAINEMENT]
 
 ### Datomic Pro
 
-Pour tester l'intégralité des commandes, il va vous falloir récupérer une licence Datomic Starter (gratuite), télécharger Datomic, faire de la configuration en suivant la [documentation officielle](https://docs.datomic.com/on-prem/dev-setup.html).
+Pour tester toutes les possibilités de Datomic, il vous faudra installer Datomic et lancer 2 processus en parallèle. Le Makefile à la racine du projet simplifie cela.
 
-Puis lancer les commandes suivantes dans le dossier :
+- Télécharger le zip de Datomic Pro
 
-``` cmd
-bin/transactor config/dev-transactor-template.properties
+``` shell
+make local_install
 ```
 
-``` cmd
-bin/run -m datomic.peer-server -h localhost -p 8998 -a myaccesskey,mysecret -d meetup-crafters-demo,datomic:dev://localhost:4334/meetup-crafters-demo
+- Lancer le transactor
+
+``` shell
+make run_transactor
 ```
 
-Comme avec dev-local, rendez vous dans le fichier `repls/demo-datomic.clj` et utilisez le client "peer-server", ajoutez des données dans la base.
+- Lancer le peer server
 
-Puis dans le fichier `repls/demo-datomic-pro.clj`, vous pourrez manipuler les requêtes autour de Log API.
+``` shell
+make run_client
+```
+
+#### Client Library
+
+Dans le fichier `repls/demo-datomic.clj`, évaluer le `client` correspondant au type `:peer-server`.
+
+#### Peer Library
+
+Dans le fichier `repls/demo-datomic-pro.clj`, vous pourrez faire des manipulations au niveau des transactions. Pour cela, il faut avoir chargé la base de données avec les instructions de la partie Client.
 
 ### XTDB
 

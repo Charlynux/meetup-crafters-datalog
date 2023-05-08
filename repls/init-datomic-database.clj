@@ -1,0 +1,5 @@
+(prn "require datomic.api")
+(require '[datomic.api :as d])
+(prn "Creating database...")
+(d/create-database "datomic:dev://localhost:4334/meetup-crafters-demo")
+(System/exit 0)

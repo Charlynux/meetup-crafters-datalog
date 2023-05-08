@@ -3,11 +3,11 @@
  :deps {datascript/datascript {:mvn/version "1.0.1"}
         com.xtdb/xtdb-core {:mvn/version "1.23.2"}
 
-        com.datomic/dev-local {:mvn/version "0.9.195"}
+        ;; com.datomic/dev-local {:mvn/version "0.9.195"}
 
         ;; Datomic Pro
-        com.datomic/client-pro {:mvn/version "0.9.63"}
-        com.datomic/datomic-pro {:mvn/version "0.9.6045"}
+        com.datomic/client-pro {:mvn/version "1.0.76"}
+        com.datomic/peer {:mvn/version "1.0.6726"}
 
         io.replikativ/datahike {:mvn/version "0.5.1506"}
         io.replikativ/datahike-jdbc {:mvn/version "0.1.2-SNAPSHOT"}}}
