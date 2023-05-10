@@ -1,5 +1,4 @@
-{:mvn/repos
- {"my.datomic.com" {:url "https://my.datomic.com/repo"}}
+{:paths ["src"]
  :deps {datascript/datascript {:mvn/version "1.0.1"}
         com.xtdb/xtdb-core {:mvn/version "1.23.2"}
 

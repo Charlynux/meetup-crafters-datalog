@@ -1,4 +1,4 @@
-(ns amiens-crafters.datomic
+(ns amiens-crafters.datomic-client
   (:require [datomic.client.api :as d]))
 
 (def client (d/client {:server-type :dev-local

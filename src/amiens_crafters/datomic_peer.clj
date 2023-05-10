@@ -1,4 +1,5 @@
-(ns amiens-crafters.datomic-pro
+(ns amiens-crafters.datomic-peer
+  "Charger la base de données avec les requêtes du namespace datomic-client avant d'exécuter les requêtes ci-dessous."
   (:require [datomic.api :as d]))
 
 (def db-uri "datomic:dev://localhost:4334/meetup-crafters-demo")

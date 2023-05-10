@@ -18,7 +18,7 @@ Si vous voulez découvrir une façon différente de penser la base de données, 
 
 ### Datascript
 
-La base de données étant in-memory, il n'y a rien de spécial. Tout se fait directement dans le fichier `repls/demo-datascript.clj`.
+La base de données étant in-memory, il n'y a rien de spécial. Tout se fait directement dans le fichier `src/amiens_crafters/datascript.clj`.
 
 ### Datomic dev-local
 
@@ -48,18 +48,18 @@ make run_client
 
 #### Client Library
 
-Dans le fichier `repls/demo-datomic.clj`, évaluer le `client` correspondant au type `:peer-server`.
+Dans le fichier `src/amiens_crafters/datomic_client.clj`, évaluer le `client` correspondant au type `:peer-server`.
 
 #### Peer Library
 
-Dans le fichier `repls/demo-datomic-pro.clj`, vous pourrez faire des manipulations au niveau des transactions. Pour cela, il faut avoir chargé la base de données avec les instructions de la partie Client.
+Dans le fichier `src/amiens_crafters/datomic_peer.clj`, vous pourrez faire des manipulations au niveau des transactions. Pour cela, il faut avoir chargé la base de données avec les instructions de la partie Client.
 
 ### XTDB
 
 Une autre base de données souvent citée comme alternative Open Source à Datomic.
 
 Elle dispose d'un fonctionnement "in-memory", tout se fait donc dans le fichier
- `repls/demo_xtdb`.
+ `src/amiens_crafters/demo_xtdb`.
 
 ## Références
 
