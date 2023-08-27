@@ -1,8 +1,9 @@
 (ns amiens-crafters.datomic-client
   (:require [datomic.client.api :as d]))
 
-(def client (d/client {:server-type :dev-local
-                       :system "dev"}))
+(def client (d/client {:server-type :datomic-local
+                       :system "dev"
+                       :storage-dir :mem}))
 ;; or
 (def client (d/client {:server-type :peer-server
                        :access-key "myaccesskey"
@@ -71,6 +72,9 @@
        :where
        [_ :employee/name ?name]
        [(.startsWith ?name "Flo")]]
+     ;; On peut aussi spécifier le type pour simplifier le travail à Datomic.
+     ;; [(.startsWith ^String ?name "Flo")]
+     ;; Cf. https://docs.datomic.com/pro/query/query.html#type-hinting
      (d/db conn))
 
 (defn useless-predicate [name]
@@ -79,10 +83,11 @@
 (d/q '[:find ?name
        :where
        [_ :employee/name ?name]
-       [(amiens-crafters.datomic/useless-predicate ?name)]]
+       [(amiens-crafters.datomic-client/useless-predicate ?name)]]
      (d/db conn))
 
 (d/transact conn {:tx-data [{:company/name "Iteracode" :company/website "https://iteracode.fr"}]})
+;; Crash - :company/website n'existe pas dans le schéma.
 
 (d/transact conn {:tx-data [{:db/ident :company/website
                              :db/valueType :db.type/string

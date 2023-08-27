@@ -2,7 +2,8 @@
  :deps {datascript/datascript {:mvn/version "1.0.1"}
         com.xtdb/xtdb-core {:mvn/version "1.23.2"}
 
-        ;; com.datomic/dev-local {:mvn/version "0.9.195"}
+        ;; Datomic Local
+        com.datomic/local    {:mvn/version "1.0.267"}
 
         ;; Datomic Pro
         com.datomic/client-pro {:mvn/version "1.0.76"}

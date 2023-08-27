@@ -20,9 +20,13 @@ Si vous voulez découvrir une façon différente de penser la base de données, 
 
 La base de données étant in-memory, il n'y a rien de spécial. Tout se fait directement dans le fichier `src/amiens_crafters/datascript.clj`.
 
-### Datomic dev-local
+### Datomic local
 
-[DE RETOUR PROCHAINEMENT]
+Désormais Datomic est disponible directement sur "Maven Central". Il n'y a donc plus d'actions manuelles pour disposer de la librairie.
+
+Cette librairie permet de manipuler l'API "client" de Datomic avec une base de données "in-memory".
+
+Le code se trouve dans `src/amiens_crafters/datomic_client.clj`.
 
 ### Datomic Pro
 
